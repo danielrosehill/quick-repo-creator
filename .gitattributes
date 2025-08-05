@@ -1,0 +1,2 @@
+debian/DEBIAN/control linguist-language=Text
+*.deb binary

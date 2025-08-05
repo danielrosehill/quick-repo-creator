@@ -1,0 +1,20 @@
+Package: quickrepo
+Version: 2.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.8), python3-pip, python3-requests, python3-setuptools, git, gh
+Maintainer: Daniel Rosehill <daniel@danielrosehill.com>
+Bugs: https://github.com/danielrosehill/quick-repo-creator/issues
+Description: CLI tool for quickly creating GitHub repositories with optional AI development templates
+ QuickRepo is a command-line interface that streamlines the process of creating
+ GitHub repositories. It supports dual naming systems (GitHub vs local filesystem),
+ optional AI development workspace templates, and integrates with GitHub's API
+ for seamless repository creation and cloning.
+ .
+ Features include:
+  - Dual naming system for GitHub readability and filesystem compatibility
+  - AI development template with structured workspace directories
+  - Interactive prompts for repository configuration
+  - Automatic local cloning after repository creation
+Homepage: https://github.com/danielrosehill/quick-repo-creator

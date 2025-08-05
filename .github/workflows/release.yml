@@ -1,0 +1,92 @@
+name: Build and Release Debian Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers only when you push a version tag like v2.0.0
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Building version: $VERSION"
+        
+    - name: Update version in build script
+      run: |
+        sed -i 's/VERSION=".*"/VERSION="${{ steps.get_version.outputs.VERSION }}"/' build-deb.sh
+        
+    - name: Update version in control file
+      run: |
+        sed -i 's/Version: .*/Version: ${{ steps.get_version.outputs.VERSION }}/' debian/DEBIAN/control
+        
+    - name: Make build script executable
+      run: chmod +x build-deb.sh
+      
+    - name: Build Debian package
+      run: ./build-deb.sh
+      
+    - name: Verify package was created
+      run: |
+        ls -la *.deb
+        PACKAGE_FILE=$(ls quickrepo_*.deb)
+        echo "PACKAGE_FILE=$PACKAGE_FILE" >> $GITHUB_ENV
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: QuickRepo v${{ steps.get_version.outputs.VERSION }}
+        body: |
+          ## QuickRepo v${{ steps.get_version.outputs.VERSION }}
+          
+          ### Installation
+          
+          Download the `.deb` package and install:
+          ```bash
+          wget https://github.com/${{ github.repository }}/releases/download/v${{ steps.get_version.outputs.VERSION }}/quickrepo_${{ steps.get_version.outputs.VERSION }}_all.deb
+          sudo dpkg -i quickrepo_${{ steps.get_version.outputs.VERSION }}_all.deb
+          ```
+          
+          ### Usage
+          
+          After installation, run:
+          ```bash
+          quickrepo
+          ```
+          
+          Make sure you have GitHub CLI authenticated:
+          ```bash
+          gh auth login
+          ```
+          
+          ### Features
+          
+          - Dual naming system (GitHub vs local filesystem)
+          - AI development template option
+          - Interactive repository creation
+          - IDE integration (Windsurf, VS Code, Code Insiders)
+          
+        draft: false
+        prerelease: false
+        
+    - name: Upload Debian Package
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./${{ env.PACKAGE_FILE }}
+        asset_name: ${{ env.PACKAGE_FILE }}
+        asset_content_type: application/vnd.debian.binary-package

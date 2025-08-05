@@ -13,8 +13,10 @@ from pathlib import Path
 
 class QuickRepo:
     def __init__(self):
-        self.github_base = Path("/home/daniel/repos/github")
-        self.huggingface_base = Path("/home/daniel/repos/hugging-face")
+        # Use user's home directory for repos instead of hardcoded path
+        home = Path.home()
+        self.github_base = home / "repos" / "github"
+        self.huggingface_base = home / "repos" / "hugging-face"
         
     def sanitize_repo_name(self, name: str) -> str:
         """Convert repo name to URL-safe format"""
@@ -218,6 +220,34 @@ class QuickRepo:
 
 
 def main():
+    # Check for help flag
+    if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h', 'help']:
+        print("🚀 QuickRepo CLI - Fast Repository Creation")
+        print("=" * 45)
+        print()
+        print("Usage: quickrepo [--help]")
+        print()
+        print("QuickRepo streamlines GitHub repository creation with:")
+        print("  • Dual naming system (GitHub vs local filesystem)")
+        print("  • AI development template option")
+        print("  • Interactive repository configuration")
+        print("  • IDE integration (Windsurf, VS Code, Code Insiders)")
+        print()
+        print("Prerequisites:")
+        print("  • GitHub CLI (gh) installed and authenticated")
+        print("  • Git configured with your credentials")
+        print()
+        print("Authentication:")
+        print("  gh auth login")
+        print()
+        print("Examples:")
+        print("  quickrepo              # Interactive mode")
+        print("  quickrepo --help       # Show this help")
+        print()
+        print("Author: Daniel Rosehill")
+        print("Repository: https://github.com/danielrosehill/quick-repo-creator")
+        return
+    
     try:
         cli = QuickRepo()
         cli.run()
