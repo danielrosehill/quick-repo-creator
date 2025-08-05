@@ -1,0 +1,9 @@
+# QuickRepo CLI has no external Python dependencies
+# It uses only standard library modules
+# 
+# External dependencies (must be installed separately):
+# - git (command line tool)
+# - gh (GitHub CLI) - install via: sudo apt install gh
+# - windsurf (optional, for IDE integration)
+# - code (VS Code, optional for IDE integration)
+# - code-insiders (VS Code Insiders, optional for IDE integration)
