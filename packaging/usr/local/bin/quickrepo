@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+# QuickRepo - CLI tool for creating GitHub repositories
+# This is the main executable that will be installed to /usr/local/bin/
+
+import sys
+import os
+
+# Add the package directory to Python path
+package_dir = '/usr/local/share/quickrepo'
+if package_dir not in sys.path:
+    sys.path.insert(0, package_dir)
+
+# Import and run the main application
+try:
+    from quickrepo_main import main
+    if __name__ == '__main__':
+        main()
+except ImportError as e:
+    print(f"Error: Could not import QuickRepo modules: {e}")
+    print("Please ensure QuickRepo is properly installed.")
+    sys.exit(1)
+except Exception as e:
+    print(f"Error running QuickRepo: {e}")
+    sys.exit(1)

@@ -20,7 +20,10 @@ fi
 mkdir -p "$PACKAGE_DIR"
 
 # Copy debian package structure
-cp -r debian/* "$PACKAGE_DIR/"
+cp -r packaging/* "$PACKAGE_DIR/"
+
+# Copy the actual quickrepo.py to the package
+cp quickrepo.py "$PACKAGE_DIR/usr/share/quickrepo/quickrepo_main.py"
 
 # Set proper permissions
 chmod 755 "$PACKAGE_DIR/DEBIAN/postinst"

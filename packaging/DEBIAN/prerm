@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+echo "Removing QuickRepo..."
+
+# Remove the executable
+if [ -f /usr/local/bin/quickrepo ]; then
+    rm -f /usr/local/bin/quickrepo
+fi
+
+# Remove the installation directory
+if [ -d /usr/local/share/quickrepo ]; then
+    rm -rf /usr/local/share/quickrepo
+fi
+
+echo "QuickRepo has been removed."
+echo "Note: Python dependencies (requests) were not removed as they may be used by other applications."

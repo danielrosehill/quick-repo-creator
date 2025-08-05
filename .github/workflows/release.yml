@@ -26,7 +26,7 @@ jobs:
         
     - name: Update version in control file
       run: |
-        sed -i 's/Version: .*/Version: ${{ steps.get_version.outputs.VERSION }}/' debian/DEBIAN/control
+        sed -i 's/Version: .*/Version: ${{ steps.get_version.outputs.VERSION }}/' packaging/DEBIAN/control
         
     - name: Make build script executable
       run: chmod +x build-deb.sh

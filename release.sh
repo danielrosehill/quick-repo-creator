@@ -48,12 +48,12 @@ fi
 # Update version in files
 echo "📝 Updating version in files..."
 sed -i "s/VERSION=\".*\"/VERSION=\"$VERSION\"/" build-deb.sh
-sed -i "s/Version: .*/Version: $VERSION/" debian/DEBIAN/control
+sed -i "s/Version: .*/Version: $VERSION/" packaging/DEBIAN/control
 
 # Check if there are changes to commit
 if ! git diff-index --quiet HEAD --; then
     echo "📦 Committing version updates..."
-    git add build-deb.sh debian/DEBIAN/control
+    git add build-deb.sh packaging/DEBIAN/control
     git commit -m "Bump version to $VERSION"
 fi
 
